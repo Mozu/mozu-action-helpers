@@ -1,0 +1,19 @@
+{
+  "name": "mozu-extension-helpers",
+  "version": "0.0.0",
+  "description": "Helper classes for authoring mozu extensions",
+  "main": "./scr/index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "author": "sparkle phipps",
+  "devDependencies": {
+    "mocha": "^2.2.4",
+    "server-destroy": "^1.0.0",
+    "when": "^3.7.3"
+  },
+  "dependencies": {
+    "mozu-node-sdk": "^1.15.15052-hotfix11",
+    "underscore": "^1.8.3"
+  }
+}

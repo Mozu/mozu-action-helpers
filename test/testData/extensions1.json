@@ -1,0 +1,32 @@
+{
+  "actions": [
+  
+    {
+      "actionId": "api.commerce.catalog.storefront.shipping.filter.beforeRequestRates",
+      "contexts": [
+        {
+          "customFunctions": [
+            {
+              "functionId": "api.commerce.catalog.storefront.shipping.filter.beforeRequestRates",
+              "applicationKey": "ib31324.phipps_setup1.1.0.0.Release"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "actionId": "api.commerce.catalog.storefront.shipping.filter.afterRequestRates",
+      "contexts": [
+        {
+          "customFunctions": [
+            {
+              "functionId": "api.commerce.catalog.storefront.shipping.filter.afterRequestRates",
+              "applicationKey": "ib31324.phipps_setup1.1.0.0.Release"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "configurations": []
+}
