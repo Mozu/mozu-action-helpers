@@ -2,12 +2,14 @@
   "name": "mozu-extension-helpers",
   "version": "0.0.0",
   "description": "Helper classes for authoring mozu extensions",
-  "main": "./scr/index.js",
+  "main": "./src/index",
   "scripts": {
     "test": "./node_modules/.bin/mocha"
   },
   "author": "sparkle phipps",
   "devDependencies": {
+    "body-parser": "^1.12.3",
+    "express": "^4.12.3",
     "mocha": "^2.2.4",
     "server-destroy": "^1.0.0",
     "when": "^3.7.3"
