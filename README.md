@@ -10,8 +10,9 @@ Helpers to assist witht the development of Mozu Extensions
 ## Features
 #### Extensions
 This module contains methods for adding your extension to the enabled extions config for a tenant.
-  ```js
-var extensionInstaller = require('mozu-extension-helpers/installers').installers.extensions().installer();
+
+```js
+var extensionInstaller = require('mozu-extension-helpers/installers/extensions').installer();
     extensionInstaller.enableExtensions(context)
         .then(function() {
             callback();
@@ -23,9 +24,10 @@ var extensionInstaller = require('mozu-extension-helpers/installers').installers
 #### CMSs
 This module contains methods for modifiing content type, document list, and document list type, and document type definitions.
   - see https://developer.mozu.com/resources/1.14/content.documentlisttypes
-  ```js
 
-var cmsInstaller = require('mozu-extension-helpers').installers.cms().installer();
+```js
+
+var cmsInstaller = require('mozu-extension-helpers/installers/cms').installer();
 // some json for the list type definition
 var myListType = require('/cmsMetaData/myListType.json')
 
