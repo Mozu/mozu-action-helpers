@@ -56,7 +56,7 @@ describe('Mozu Hosted Calls', function() {
         });
 
         var oppParams = require('./utils/apiOperationConetxt').operation1();
-        var entitlementInstaller = require('../').installers.extensions().installer();
+        var entitlementInstaller = require('../installers/extensions').installer();
 
 
         entitlementInstaller.enableExtensions(oppParams.context)

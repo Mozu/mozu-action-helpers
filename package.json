@@ -2,7 +2,6 @@
   "name": "mozu-extension-helpers",
   "version": "0.0.0",
   "description": "Helper classes for authoring mozu extensions",
-  "main": "./src/index",
   "scripts": {
     "test": "./node_modules/.bin/mocha"
   },

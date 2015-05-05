@@ -11,7 +11,7 @@ Helpers to assist witht the development of Mozu Extensions
 #### Extensions
 This module contains methods for adding your extension to the enabled extions config for a tenant.
   ```js
-var extensionInstaller = require('mozu-extension-helpers').installers.extensions().installer();
+var extensionInstaller = require('mozu-extension-helpers/installers').installers.extensions().installer();
     extensionInstaller.enableExtensions(context)
         .then(function() {
             callback();
