@@ -17,7 +17,9 @@ var extensionInstaller = require('mozu-extension-helpers/installers/extensions')
         .then(function() {
             callback();
         })
-        .catch(callback);
+        .catch(function(e){
+            callback(e);
+        });
 };
 ```
 
@@ -38,7 +40,9 @@ cmsInstaller.upsertSiteList(testListType)
         .then(function() {
             callback();
         })
-        .catch(callback);
+        .catch(function(e){
+            callback(e);
+        });
 };
 ```
 

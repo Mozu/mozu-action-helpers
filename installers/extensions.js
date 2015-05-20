@@ -20,7 +20,7 @@ var _ = require('underscore');
         //add all your actions... 
         _.each(extExports, function (extExport) {
             //dont add installers.. not really actions
-            if (extExport.actionId.indexOf('api.platform.applications') !== 0) {
+            if (extExport.actionId.indexOf('embedded.platform.applications') !== 0) {
                 me.addCustomFunction(enabledExtensions, extExport.actionId, extExport.id, applicationKey);
             }
         });
