@@ -14,7 +14,6 @@
     "when": "^3.7.3"
   },
   "dependencies": {
-    "mozu-node-sdk": "^1.15.15052-hotfix11",
-    "underscore": "^1.8.3"
+    "mozu-node-sdk": "^1.17.1512-4.0-hotfix3"
   }
 }

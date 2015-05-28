@@ -1,7 +1,5 @@
-var _ = require('underscore');
-
   function ExtensionInstaller() {
-      this.client = require('mozu-node-sdk').client();
+      this.client = require('mozu-node-sdk/clients/platform/tenantExtensions')();
       this.client.context["user-claims"] = null;
   }
   ExtensionInstaller.installer = function() {
@@ -15,10 +13,10 @@ var _ = require('underscore');
           extExports = context.get.exports(),
           applicationKey = context.get.applicationKey();
 
-    return me.client.platform().tenantExtensions().getExtensions().then(function (enabledExtensions) {
+    return me.client.getExtensions().then(function (enabledExtensions) {
         enabledExtensions = enabledExtensions || {};
         //add all your actions... 
-        _.each(extExports, function (extExport) {
+        extExports.forEach(function (extExport) {
             //dont add installers.. not really actions
             if (extExport.actionId.indexOf('embedded.platform.applications') !== 0) {
                 me.addCustomFunction(enabledExtensions, extExport.actionId, extExport.id, applicationKey);
@@ -42,9 +40,9 @@ var _ = require('underscore');
           enabledExtensions.actions = [];
       }
       //check for missing action
-      action = _.find(enabledExtensions.actions, function(action) {
-          return action.actionId === actionId;
-      });
+      action = enabledExtensions.actions.reduce(function(found, action) {
+          return (action.actionId === actionId) ? action : found;
+      }, false);
       if (!action) {
           action = {
               'actionId': actionId,
@@ -62,7 +60,7 @@ var _ = require('underscore');
       customFunctions = action.contexts[0].customFunctions;
 
       //check for customFunction
-      if (!_.some(customFunctions, function(cFunc) {
+      if (!customFunctions.some(function(cFunc) {
               return cFunc.functionId === functionId && cFunc.applicationKey === applicationKey;
           })) {
           customFunctions.push({
@@ -75,5 +73,5 @@ var _ = require('underscore');
 
   };
   ExtensionInstaller.prototype.save = function(enabledExtensions) {
-    return this.client.platform().tenantExtensions().updateExtensions(enabledExtensions);
+    return this.client.updateExtensions(enabledExtensions);
   };
