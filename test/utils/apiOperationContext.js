@@ -55,8 +55,10 @@ var callback = function(e) {
 
 
 module.exports = {
-    operation1: {
-        context: context,
-        callback: callback
+    operation1: function() {
+        return {
+            context: context,
+            callback: callback
+        };
     }
 };

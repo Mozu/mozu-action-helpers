@@ -1,11 +1,9 @@
+var entityListClientFactory = require('mozu-node-sdk/clients/platform/entityList')
+
 function EntityInstaller() {
-    this.client = require('mozu-node-sdk/clients/platform/entityList')();
+    this.client = entityListClientFactory(config);
     this.client.context["user-claims"] = null;
 }
-
-EntityInstaller.installer = function() {
-    return new EntityInstaller();
-};
 
 module.exports = EntityInstaller;
 

@@ -1,27 +1,27 @@
-function CmsInstaller() {
-    this.client = require('mozu-node-sdk').client();
-    this.client.context["user-claims"] = null;
-}
+var documentListTypeClientFactory = require('mozu-node-sdk/clients/content/documentListType');
 
-CmsInstaller.installer = function() {
-    return new CmsInstaller();
-};
+function CmsInstaller(config) {
+  if (!this instanceof CmsInstaller) {
+    return new CmsInstaller(config);
+  }
+  this.client = documentListTypeClientFactory(config);
+  this.client.context["user-claims"] = null;
+}
 
 module.exports = CmsInstaller;
 
-//get tenant from tenant service by using ctx.apiContext.tenantId;
-
 CmsInstaller.prototype.updateListNamespace = function(list, context) {
-    list.nameSpace = context.get.nameSpace();
-    list.documentListTypeFQN = list.name + "@" + list.nameSpace;
+  list.nameSpace = context.get.nameSpace();
+  list.documentListTypeFQN = list.name + "@" + list.nameSpace;
+  return list;
 };
 
 CmsInstaller.prototype.upsertSiteList = function(list) {
-	var me = this;
-    return me.client.content().documentListType().createDocumentListType(list).catch( 
-        function(e) {
-            return me.client.content().documentListType().updateDocumentListType(list, {
-                documentListTypeFQN: list.documentListTypeFQN
-            });
-        });
+  var me = this;
+  return me.client.content().documentListType().createDocumentListType(list).catch(
+    function() {
+      return me.client.content().documentListType().updateDocumentListType(list, {
+        documentListTypeFQN: list.documentListTypeFQN
+      });
+    });
 };
