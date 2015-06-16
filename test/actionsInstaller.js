@@ -1,7 +1,7 @@
 /* global describe: true, before:true, after:true , it:true*/
 var assert = require('assert');
 var enableDestroy = require('server-destroy');
-var extensionGet1 = require('./testData/extensions1.json');
+var actionGet1 = require('./testData/actions1.json');
 var bodyParser = require('body-parser');
 
 var express = require('express');
@@ -17,7 +17,7 @@ describe('Mozu Hosted Calls', function() {
     tenantPod.use(jsonParser);
 
     tenantPod.get('/api/platform/extensions/', function(req, res) {
-      res.send(extensionGet1);
+      res.send(actionGet1);
     });
     tenantPod.put('/api/platform/extensions/', function(req, res) {
       console.log(req.path);
@@ -40,7 +40,7 @@ describe('Mozu Hosted Calls', function() {
 
 
 
-  it('installs all extensions in scope', function(done) {
+  it('installs all actions in scope', function(done) {
 
     var headersConstants = require('mozu-node-sdk/constants').headers,
       sdkConfig = {
@@ -55,7 +55,7 @@ describe('Mozu Hosted Calls', function() {
     });
 
     var oppParams = require('./utils/apiOperationContext').operation1();
-    var entitlementInstaller = require('../installers/extensions')();
+    var entitlementInstaller = require('../installers/actions')();
 
 
     entitlementInstaller.enableExtensions(oppParams.context)
