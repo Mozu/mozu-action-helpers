@@ -1,48 +1,48 @@
 var tenantExtensionsClientFactory = require('mozu-node-sdk/clients/platform/tenantExtensions');
 
-function ExtensionInstaller(config) {
-  if (!(this instanceof ExtensionInstaller)) {
-    return new ExtensionInstaller(config);
+function ActionInstaller(config) {
+  if (!(this instanceof ActionInstaller)) {
+    return new ActionInstaller(config);
   }
   this.client = tenantExtensionsClientFactory(config);
   this.client.context["user-claims"] = null;
 }
 
-module.exports = ExtensionInstaller;
+module.exports = ActionInstaller;
 
-ExtensionInstaller.prototype.enableExtensions = function(context) {
+ActionInstaller.prototype.enableActions = function(context) {
   var me = this,
     extExports = context.get.exports(),
     applicationKey = context.get.applicationKey();
 
-  return me.client.getExtensions().then(function(enabledExtensions) {
-    enabledExtensions = enabledExtensions || {};
+  return me.client.getExtensions().then(function(enabledActions) {
+    enabledActions = enabledActions || {};
     //add all your actions... 
     extExports.forEach(function(extExport) {
       //dont add installers.. not really actions
       if (extExport.actionId.indexOf('embedded.platform.applications') !== 0) {
-        me.addCustomFunction(enabledExtensions, extExport.actionId, extExport.id, applicationKey);
+        me.addCustomFunction(enabledActions, extExport.actionId, extExport.id, applicationKey);
       }
     });
 
-    return me.save(enabledExtensions);
+    return me.save(enabledActions);
   });
 
 
 };
 
-ExtensionInstaller.prototype.addCustomFunction = function(enabledExtensions, actionId, functionId, applicationKey) {
+ActionInstaller.prototype.addCustomFunction = function(enabledActions, actionId, functionId, applicationKey) {
 
   var customFunctions,
     action;
 
-  enabledExtensions = enabledExtensions || {};
+  enabledActions = enabledActions || {};
   //if empty doc add actions node
-  if (!enabledExtensions.actions) {
-    enabledExtensions.actions = [];
+  if (!enabledActions.actions) {
+    enabledActions.actions = [];
   }
   //check for missing action
-  action = enabledExtensions.actions.reduce(function(found, action) {
+  action = enabledActions.actions.reduce(function(found, action) {
     return (action.actionId === actionId) ? action : found;
   }, false);
   if (!action) {
@@ -50,7 +50,7 @@ ExtensionInstaller.prototype.addCustomFunction = function(enabledExtensions, act
       'actionId': actionId,
       'contexts': []
     };
-    enabledExtensions.actions.push(action);
+    enabledActions.actions.push(action);
   }
   action.contexts = action.contexts || [];
   if (action.contexts.length === 0) {
@@ -75,6 +75,6 @@ ExtensionInstaller.prototype.addCustomFunction = function(enabledExtensions, act
 
 };
 
-ExtensionInstaller.prototype.save = function(enabledExtensions) {
-  return this.client.updateExtensions(enabledExtensions);
+ExtensionInstaller.prototype.save = function(enabledActions) {
+  return this.client.updateExtensions(enabledActions);
 };

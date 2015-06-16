@@ -1,5 +1,5 @@
 module.exports = {
   cms: require('./cms'),
-  extensions: require('./extensions'),
+  actions: require('./actions'),
   entities: require('./entities')
 };
