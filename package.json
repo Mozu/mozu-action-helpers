@@ -1,6 +1,6 @@
 {
   "name": "mozu-action-helpers",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Helper classes for authoring mozu actions",
   "scripts": {
     "test": "./node_modules/.bin/mocha"
