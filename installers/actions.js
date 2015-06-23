@@ -75,6 +75,6 @@ ActionInstaller.prototype.addCustomFunction = function(enabledActions, actionId,
 
 };
 
-ExtensionInstaller.prototype.save = function(enabledActions) {
+ActionInstaller.prototype.save = function(enabledActions) {
   return this.client.updateExtensions(enabledActions);
 };
