@@ -18,10 +18,8 @@ CmsInstaller.prototype.updateListNamespace = function(list, context) {
 
 CmsInstaller.prototype.upsertSiteList = function(list) {
   var me = this;
-  return me.client.content().documentListType().createDocumentListType(list).catch(
+  return me.client.createDocumentListType(list).catch(
     function() {
-      return me.client.content().documentListType().updateDocumentListType(list, {
-        documentListTypeFQN: list.documentListTypeFQN
-      });
+      return me.client.updateDocumentListType(list);
     });
 };
