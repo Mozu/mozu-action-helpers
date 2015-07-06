@@ -59,6 +59,14 @@ entityInstaller.upsertList(myListType).then(callback.bind(null, null), callback)
 
 ```
 
+The `enableEntitiesForTenant` method will turn on the hidden setting that makes the "Content/Entity" menu option visible in the Settings menu in admin. It requires a tenantId in the client context (which it will automatically receive in the code action custom function, if you supply the `content.apiContext` as context) but needs no arguments.
+
+```js
+entityInstaller.enableEntitiesForTenant().then(function() {
+    console.log('enabled!');
+})
+```
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
