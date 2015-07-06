@@ -40,7 +40,7 @@ describe('Mozu Hosted Calls', function() {
 
 
 
-  it('installs all actions in scope', function(done) {
+  it('installs all actions in scope', function() {
 
     var headersConstants = require('mozu-node-sdk/constants').headers,
       sdkConfig = {
@@ -58,11 +58,7 @@ describe('Mozu Hosted Calls', function() {
     var entitlementInstaller = require('../installers/actions')();
 
 
-    entitlementInstaller.enableExtensions(oppParams.context)
-      .then(function() {
-        done();
-      })
-      .catch(done);
+    return entitlementInstaller.enableActions(oppParams.context);
 
   });
 });
