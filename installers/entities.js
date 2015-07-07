@@ -18,8 +18,9 @@ EntityInstaller.prototype.updateListNamespace = function(list, context) {
 	list.entityListFullName = list.name + "@" + list.nameSpace;
 };
 
-EntityInstaller.prototype.upsertList = function(list) {
+EntityInstaller.prototype.upsertList = function(list, context) {
   var me = this;
+	this.updateListNamespace(list, context);
     return me.client.createEntityList(list).catch( 
     function(e) {
         return me.client.updateEntityList(list);
@@ -29,7 +30,6 @@ EntityInstaller.prototype.upsertList = function(list) {
 
 EntityInstaller.prototype.enableEntitiesForTenant = function() {
 	var client = entityClientFactory(this.client);
-	this.updateListNamespace(list, context);
 	return client.getEntity(settingsDocumentConfig).then(function(settings) {
 		settings.entityManagerVisible = true;
 		return client.updateEntity(settingsDocumentConfig, {
