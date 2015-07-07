@@ -29,7 +29,7 @@ EntityInstaller.prototype.upsertList = function(list) {
 
 EntityInstaller.prototype.enableEntitiesForTenant = function() {
 	var client = entityClientFactory(this.client);
-	me.updateListNamespace(list, context);
+	this.updateListNamespace(list, context);
 	return client.getEntity(settingsDocumentConfig).then(function(settings) {
 		settings.entityManagerVisible = true;
 		return client.updateEntity(settingsDocumentConfig, {
