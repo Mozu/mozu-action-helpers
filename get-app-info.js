@@ -6,5 +6,5 @@
 var parseAppKey = require('./parse-app-key');
 
 module.exports = function(context) {
-  return parseAppKey(context.apiConfig.appKey);
+  return parseAppKey(context.apiContext.appKey);
 };

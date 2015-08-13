@@ -4,7 +4,7 @@ var assert = require('assert');
 describe('the getAppInfo function', function() {
   it("returns metadata about the application", function() {
     var k = getAppInfo({
-      apiConfig: {
+      apiContext: {
         appKey: "abc123.exampleapp.1.0.2"
       }
     });
