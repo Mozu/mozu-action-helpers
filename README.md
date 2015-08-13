@@ -7,6 +7,40 @@ Helpers to assist with the development of Mozu Code Actions
 
 ## Features
 
+### Utilities
+
+This package contains several utility methods for common tasks inside actions.
+
+#### parseAppKey
+
+You may need to parse an application key. This function takes an application key as a string, and returns an object with `namespace`, `id`, and `version` properties.
+
+```js
+var parseAppKey = require('mozu-action-helpers/parse-app-key');
+var d = parseAppKey('abc123.exampleapp.1.0.1');
+
+assert(d.namespace === 'abc123');
+assert(d.id === 'exampleapp');
+assert(d.version === '1.0.0');
+```
+
+### getAppInfo
+
+This function takes a `context` and returns relevant app metadata.
+
+```js
+var getAppInfo = require('mozu-action-helpers/get-app-info');
+var info = getAppInfo(context);
+
+assert(info.namespace === 'abc123');
+assert(info.id === 'exampleapp');
+assert(info.version === '1.0.0');
+```
+
+*(Currently this is very similar to `parseAppKey`, but it is meant to be more general; in the future it may return much more app information than just what is in the key.)*
+
+### Installers
+
 The `installers` provide convenient wrappers for common CMS, platform, and entity tasks that code action authors will find themselves frequently doing. Each one is basically a thin layer around a [Mozu Node SDK](https://github.com/mozu/mozu-node-sdk) instance, so you must pass an API context to the constructors. In a Code Action, that API context will be provided by the `context` object.
 
 #### Actions
