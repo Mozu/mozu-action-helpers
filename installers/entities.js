@@ -20,7 +20,7 @@ EntityInstaller.prototype.updateListNamespace = function (list, context) {
     for (var key in list) {
         if (list.hasOwnProperty(key) && typeof list[key] === 'string') {
             list[key] = list[key].replace(/\{namespace\}/ig, function () {
-                var ns = getAppInfo(context).namespace;
+                var ns = info.namespace;
                 console.log('entityList %s {namespace} token replaced with %s', list.name, ns);                
                 return ns;
             });
