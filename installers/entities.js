@@ -30,8 +30,7 @@ EntityInstaller.prototype.updateListNamespace = function (list, context) {
 
 function logMessage(method, msg) {
     return function (list) {
-        console[method](msg, getListName(list));
-        return obj;
+        console[method](msg, getListName(list));     
     }
 }
 
