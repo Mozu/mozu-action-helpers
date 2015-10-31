@@ -16,6 +16,6 @@
   "dependencies": {
     "lodash.assign": "^3.2.0",
     "lodash.findwhere": "^3.1.0",
-    "mozu-node-sdk": "^1.18.15223-0"
+    "mozu-node-sdk": "^1.18.15223-5"
   }
 }

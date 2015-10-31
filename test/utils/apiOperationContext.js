@@ -1,4 +1,7 @@
 var context = {
+    apiContext: {
+      applicationKey: 'asdfsadf'
+    },
     get: {
 
         installationState: function() {

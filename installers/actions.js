@@ -7,7 +7,7 @@ function ActionInstaller(config) {
   if (!(this instanceof ActionInstaller)) {
     return new ActionInstaller(config);
   }
-  this.client = tenantExtensionsClientFactory(config);
+  this.client = new tenantExtensionsClientFactory(config);
   this.client.context["user-claims"] = null;
 }
 
