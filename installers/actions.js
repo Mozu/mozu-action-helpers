@@ -1,4 +1,7 @@
-var tenantExtensionsClientFactory = require('mozu-node-sdk/clients/platform/tenantExtensions');
+var assign = require('lodash.assign');
+var findWhere = require('lodash.findwhere');
+var tenantExtensionsClientFactory = require(
+  'mozu-node-sdk/clients/platform/tenantExtensions');
 
 function ActionInstaller(config) {
   if (!(this instanceof ActionInstaller)) {
@@ -10,20 +13,48 @@ function ActionInstaller(config) {
 
 module.exports = ActionInstaller;
 
-ActionInstaller.prototype.enableActions = function(context) {
+ActionInstaller.prototype.enableActions =
+  function(context, globalConfigurator, configurators) {
   var me = this,
     extExports = context.get.exports(),
     applicationKey = context.get.applicationKey();
 
   return me.client.getExtensions().then(function(enabledActions) {
-    enabledActions = enabledActions || {};
+
+    enabledActions = assign({
+      configurations: []
+    }, enabledActions);
+
     //add all your actions... 
     extExports.forEach(function(extExport) {
       //dont add installers.. not really actions
       if (extExport.actionId.indexOf('embedded.platform.applications') !== 0) {
-        me.addCustomFunction(enabledActions, extExport.actionId, extExport.id, applicationKey);
+        me.addCustomFunction(
+          enabledActions, 
+          extExport.actionId, 
+          extExport.id, 
+          applicationKey,
+          configurators && configurators[extExport.id]
+        );
       }
     });
+
+    var appConfiguration;
+    if (globalConfigurator) {
+      // add custom configurations at app level
+      appConfiguration = findWhere(enabledActions.configurations, 
+                                   { applicationKey: applicationKey });
+      if (!appConfiguration) {
+        appConfiguration = {
+          applicationKey: applicationKey,
+          configuration: globalConfigurator({})
+        };
+        enabledActions.configurations.push(appConfiguration);
+      } else {
+        appConfiguration.configuration = 
+          globalConfigurator(appConfiguration.configuration);
+      }
+    }
 
     return me.save(enabledActions);
   });
@@ -31,7 +62,8 @@ ActionInstaller.prototype.enableActions = function(context) {
 
 };
 
-ActionInstaller.prototype.addCustomFunction = function(enabledActions, actionId, functionId, applicationKey) {
+ActionInstaller.prototype.addCustomFunction =
+  function(enabledActions, actionId, functionId, applicationKey, configurator) {
 
   var customFunctions,
     action;
@@ -42,9 +74,8 @@ ActionInstaller.prototype.addCustomFunction = function(enabledActions, actionId,
     enabledActions.actions = [];
   }
   //check for missing action
-  action = enabledActions.actions.reduce(function(found, action) {
-    return (action.actionId === actionId) ? action : found;
-  }, false);
+  
+  action = findWhere(enabledActions.actions, { actionId: actionId });
   if (!action) {
     action = {
       'actionId': actionId,
@@ -55,22 +86,26 @@ ActionInstaller.prototype.addCustomFunction = function(enabledActions, actionId,
   action.contexts = action.contexts || [];
   if (action.contexts.length === 0) {
     action.contexts.push({
-      "customFunctions": []
+      customFunctions: []
     });
   }
   //todo allow more contexts...
   customFunctions = action.contexts[0].customFunctions;
 
+  var idProps = {
+    functionId: functionId,
+    applicationKey: applicationKey
+  };
 
-  function matchesFuncToAdd(cFunc) {
-    return cFunc.functionId === functionId && cFunc.applicationKey === applicationKey;
+  var matchingFunc = findWhere(customFunctions, idProps);
+
+  if (!matchingFunc) {
+    matchingFunc = idProps;
+    customFunctions.push(idProps);
   }
 
-  if (!customFunctions.some(matchesFuncToAdd)) {
-    customFunctions.push({
-      'functionId': functionId,
-      'applicationKey': applicationKey
-    });
+  if (configurator) {
+    matchingFunc.configuration = configurator(matchingFunc.configuration);
   }
 
 };
