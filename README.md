@@ -56,12 +56,46 @@ actionInstaller.enableActions(context).then(callback.bind(null, null), callback)
 };
 ```
 
-##### Adding and Updating Configuration
+##### Modifying Settings and Adding Configuration
 
-Often, an Arc.js application would benefit from some runtime, merchant modifiable settings. Arc.js has the concept of "configurations" to suit this purpose. Configurations are arbitrary JSON objects of whatever key-value pairs might suit your application's needs. In the [Arc.js extensions API](http://developer.mozu.com/content/api/APIResources/platform/extensions/extensions.htm), there is both a top-level `configurations` array for global, app-level configurations, an an optional `configuration` property on each custom function definition. The `configuration` values can be modified by the merchant in the Action Settings menu, and they are available to custom functions at the `context.configuration` property. Using the `ActionInstaller`, you can preset global configuration or per-function local configuration. The `actionInstaller.enableActions` method from the above example can take two optional arguments: a function to set global configuration, and an object whose keys can be the IDs of individual custom functions, and whose values are functions which return configuration objects for their respective custom functions.
+The `.enableActions` method takes two more optional arguments.
 
-If there is existing configuration for any of these, then the configurator functions will receive the existing configuration as their only argument.
+**Global Configuration**
+The first is a function that can create or update a global app-level configuration object. The configuration object can have any key-value pairs; a business user will be able to update this in the Action Settings JSON editor, and your custom functions will receive this configurtion in the `context.configuration` object.
 
+If you supply a configurator function as the second argument to `enableActions`, it will receive any existing configuration for this app as its argument. This way, you can update existing configurations if they need to change.
+
+```js
+actionsInstaller.enableActions(context, function(appConfig) {
+  appConfig = appConfig || {};
+  // let's say that in your new version, the `widget` config is an array now.
+  appConfig.widgets = appConfig.widgets || [];
+  if (appConfig.widget) {
+    appConfig.widgets.push(appConfig.widget);
+    delete appConfig.widget;
+  }
+  return appConfig;
+}
+```
+
+**Per-Function Setting Transforms**
+The second optional argument you can pass to `.enableActions` is an object of transform functions named after your custom functions. These transform functions are how you can modify Arc.js runtime settings for custom functions, like `logLevel` and `timeoutMilliseconds`, and also how you can provide individual configuration objects for each custom function, via the `configuration` property. Each property on the object should be named after one of your custom functions; its value is a function that will receive the existing settings.
+
+```js
+actionsInstaller.enableActions(context, null, {
+  'http.storefront.pages.global.beforeRequest': function(settings) {
+    settings.logLevel = 'DEBUG';
+    return settings;
+  },
+  'customFunctionName2': function(settings) {
+    settings.timeoutMilliseconds = 20000;
+    settings.configuration = Object.assign({}, settings.configuration, {
+      debugSomeExternalCall: true
+    });
+    return settings;
+  }
+}
+```
 #### CMS
 This module contains methods for modifying documentList, and documentListType, and documentType definitions. See https://developer.mozu.com/resources/1.14/content.documentlisttypes
 
