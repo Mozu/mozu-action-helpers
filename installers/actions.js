@@ -105,7 +105,7 @@ ActionInstaller.prototype.addCustomFunction =
   }
 
   if (configurator) {
-    matchingFunc.configuration = configurator(matchingFunc.configuration);
+    assign(matchingFunc, configurator(matchingFunc));
   }
 
 };

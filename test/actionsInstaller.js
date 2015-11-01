@@ -1,6 +1,7 @@
 /* global describe: true, before:true, after:true , it:true*/
-var findWhere = require('lodash.findwhere');
 var assert = require('assert');
+var findWhere = require('lodash.findwhere');
+var assign = require('lodash.assign');
 var enableDestroy = require('server-destroy');
 var actionGet1 = require('./testData/actions1.json');
 var bodyParser = require('body-parser');
@@ -81,23 +82,30 @@ describe('Mozu Hosted Calls', function() {
         testGlobalConf, 'global configuration not passed');
     }
 
-    return entitlementInstaller.enableActions(oppParams.context, function() {
-      return testGlobalConf;
+    return entitlementInstaller.enableActions(oppParams.context,
+      function() {
+        return testGlobalConf;
     });
   });
 
-  it('installs per-function custom configuration', function() {
+  it('transforms per-function custom settings and configuration', function() {
 
-    var testBeforeInstallConf =  {
-      'test': 'faile',
-      's e r i a l i z e s': ['poorly'],
-      nullExists: false
-    };
+    var testBeforeInstallSettings = {
+      logLevel: 'DEBUG',
+      configuration: {
+        'test': 'faile',
+        's e r i a l i z e s': ['poorly'],
+        nullExists: false
+      }
+    }
 
-    var testBeforeRequestConf =  {
-      'test': 'result',
-      's e r i a l i z e s': ['penguin'],
-      nullExists: true
+    var testBeforeRequestSettings = {
+      timeoutMilliseconds: 20000,
+      configuration: {
+        'test': 'result',
+        's e r i a l i z e s': ['penguin'],
+        nullExists: true
+      }
     };
 
     var oppParams = require('./utils/apiOperationContext').operation1();
@@ -115,8 +123,13 @@ describe('Mozu Hosted Calls', function() {
                'one custom function config exists');
       assert.deepEqual(
         beforeInstallAction.contexts[0].customFunctions[0].configuration,
-        testBeforeInstallConf,
-        'configuration exists on function config'
+        testBeforeInstallSettings.configuration,
+        'configuration was set on function'
+      );
+      assert.equal(
+        beforeInstallAction.contexts[0].customFunctions[0].logLevel,
+        'DEBUG',
+        'loglevel was set on function'
       );
       var beforeRequestAction = findWhere(req.body.actions, {
         actionId: 'storefront.pages.global.beforeRequest'
@@ -127,18 +140,23 @@ describe('Mozu Hosted Calls', function() {
                'one custom function config exists');
       assert.deepEqual(
         beforeRequestAction.contexts[0].customFunctions[0].configuration,
-        testBeforeRequestConf,
-        'configuration exists on function config'
+        testBeforeRequestSettings.configuration,
+        'configuration was set on function'
+      );
+      assert.equal(
+        beforeRequestAction.contexts[0].customFunctions[0].timeoutMilliseconds,
+        20000,
+        'timeoutMilliseconds was set on function'
       );
     }
 
     return entitlementInstaller.enableActions(oppParams.context, null,
       {
-        'api.platform.applications.install': function() {
-          return testBeforeInstallConf;
+        'api.platform.applications.install': function(funcSettings) {
+          return assign({}, funcSettings, testBeforeInstallSettings);
         },
-        'storefront.page.beforeRequest': function() {
-          return testBeforeRequestConf;
+        'storefront.page.beforeRequest': function(funcSettings) {
+          return assign({}, funcSettings, testBeforeRequestSettings);
         }
       }
     );
