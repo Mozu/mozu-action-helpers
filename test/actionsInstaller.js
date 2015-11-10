@@ -53,8 +53,12 @@ describe('Mozu Hosted Calls', function() {
 
     verifyPayload = function(req, res) {
       console.log(req.path);
+    
       assert.ok(JSON.stringify(req.body).indexOf('beforeRequestRates') > -1, 'contains beforeRequestRates');
-    }
+
+      assert.ok(JSON.stringify(req.body).indexOf('bing.bong.1.0.0.Release') === -1, 'contains bing.bong.1.0.0.Release  should have replaced with ver 1.0.1');
+      
+    };
 
     return entitlementInstaller.enableActions(oppParams.context);
 

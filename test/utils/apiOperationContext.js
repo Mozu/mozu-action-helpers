@@ -34,7 +34,7 @@ var context = {
             }];
         },
         applicationKey: function() {
-            return "asdfsadf";
+            return "bing.bong.1.0.1.Release";
         }
 
     },

@@ -1,5 +1,6 @@
 var assign = require('lodash.assign');
 var findWhere = require('lodash.findwhere');
+var find = require ('lodash.find');
 var tenantExtensionsClientFactory = require(
   'mozu-node-sdk/clients/platform/tenantExtensions');
 
@@ -92,16 +93,26 @@ ActionInstaller.prototype.addCustomFunction =
   //todo allow more contexts...
   customFunctions = action.contexts[0].customFunctions;
 
-  var idProps = {
-    functionId: functionId,
-    applicationKey: applicationKey
-  };
 
-  var matchingFunc = findWhere(customFunctions, idProps);
+ // var matchingFunc = findWhere(customFunctions, idProps);
+  var matchingFunc = find ( customFunctions, function(def){
+      if ( def.functionId === functionId){
+        //match version and package independent variations of an app key
+        return (def.applicationKey||'').split('.').splice(0,2).join('.') === ( applicationKey ||'').split('.').splice(0,2).join('.') ;
+      }
+      return false;
+  });
+  
 
   if (!matchingFunc) {
-    matchingFunc = idProps;
-    customFunctions.push(idProps);
+    matchingFunc = {
+      functionId: functionId,
+      applicationKey: applicationKey
+    };
+    customFunctions.push(matchingFunc);
+  }else{
+    //replace the applicationKey incase of switching pacakges or upgrading version
+    matchingFunc.applicationKey = applicationKey;
   }
 
   if (configurator) {

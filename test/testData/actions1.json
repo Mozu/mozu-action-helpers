@@ -26,7 +26,23 @@
           ]
         }
       ]
+    },
+
+  {
+      "actionId": "api.commerce.carts.embedded.beforeAddItem",
+      "contexts": [
+        {
+          "customFunctions": [
+            {
+              "functionId": "api.commerce.carts.embedded.beforeAddItem",
+              "applicationKey": "bing.bong.1.0.0.Release"
+            }
+          ]
+        }
+      ]
     }
+
+    
   ],
   "configurations": []
 }
