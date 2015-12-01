@@ -1,7 +1,6 @@
 /* global describe: true, before:true, after:true , it:true*/
 var assert = require('assert');
-var findWhere = require('lodash.findwhere');
-var assign = require('lodash.assign');
+var _ = require('../endash');
 var enableDestroy = require('server-destroy');
 var actionGet1 = require('./testData/actions1.json');
 var bodyParser = require('body-parser');
@@ -118,7 +117,7 @@ describe('Mozu Hosted Calls', function() {
     var appKey = oppParams.context.get.applicationKey();
 
     verifyPayload = function(req, res) {
-      var beforeInstallAction = findWhere(req.body.actions, {
+      var beforeInstallAction = _.findWhere(req.body.actions, {
         actionId: 'api.platform.applications.install'
       });
       assert.ok(beforeInstallAction, 'beforeInstallAction exists');
@@ -135,7 +134,7 @@ describe('Mozu Hosted Calls', function() {
         'DEBUG',
         'loglevel was set on function'
       );
-      var beforeRequestAction = findWhere(req.body.actions, {
+      var beforeRequestAction = _.findWhere(req.body.actions, {
         actionId: 'storefront.pages.global.beforeRequest'
       });
       assert.ok(beforeRequestAction, 'beforeInstallAction exists');
@@ -157,10 +156,10 @@ describe('Mozu Hosted Calls', function() {
     return entitlementInstaller.enableActions(oppParams.context, null,
       {
         'api.platform.applications.install': function(funcSettings) {
-          return assign({}, funcSettings, testBeforeInstallSettings);
+          return _.assign({}, funcSettings, testBeforeInstallSettings);
         },
         'storefront.page.beforeRequest': function(funcSettings) {
-          return assign({}, funcSettings, testBeforeRequestSettings);
+          return _.assign({}, funcSettings, testBeforeRequestSettings);
         }
       }
     );

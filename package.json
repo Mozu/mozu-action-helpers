@@ -3,20 +3,16 @@
   "version": "0.5.1",
   "description": "Helper classes for authoring mozu actions",
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+    "test": "mocha"
   },
   "author": "sparkle phipps",
   "devDependencies": {
-    "body-parser": "^1.13.3",
+    "body-parser": "^1.14.1",
     "express": "^4.13.3",
-    "mocha": "^2.2.5",
-    "server-destroy": "^1.0.1",
-    "when": "^3.7.3"
+    "mocha": "^2.3.4",
+    "server-destroy": "^1.0.1"
   },
   "dependencies": {
-    "lodash.assign": "^3.2.0",
-    "lodash.find": "^3.2.1",
-    "lodash.findwhere": "^3.1.0",
-    "mozu-node-sdk": "^1.18.15223-5"
+    "mozu-node-sdk": "^2.1.0"
   }
 }

@@ -1,6 +1,4 @@
-var assign = require('lodash.assign');
-var findWhere = require('lodash.findwhere');
-var find = require ('lodash.find');
+var _ = require('../endash');
 var tenantExtensionsClientFactory = require(
   'mozu-node-sdk/clients/platform/tenantExtensions');
 
@@ -22,7 +20,7 @@ ActionInstaller.prototype.enableActions =
 
   return me.client.getExtensions().then(function(enabledActions) {
 
-    enabledActions = assign({
+    enabledActions = _.assign({
       configurations: []
     }, enabledActions);
 
@@ -43,7 +41,7 @@ ActionInstaller.prototype.enableActions =
     var appConfiguration;
     if (globalConfigurator) {
       // add custom configurations at app level
-      appConfiguration = findWhere(enabledActions.configurations, 
+      appConfiguration = _.findWhere(enabledActions.configurations, 
                                    { applicationKey: applicationKey });
       if (!appConfiguration) {
         appConfiguration = {
@@ -76,7 +74,7 @@ ActionInstaller.prototype.addCustomFunction =
   }
   //check for missing action
   
-  action = findWhere(enabledActions.actions, { actionId: actionId });
+  action = _.findWhere(enabledActions.actions, { actionId: actionId });
   if (!action) {
     action = {
       'actionId': actionId,
@@ -95,7 +93,7 @@ ActionInstaller.prototype.addCustomFunction =
 
 
  // var matchingFunc = findWhere(customFunctions, idProps);
-  var matchingFunc = find ( customFunctions, function(def){
+  var matchingFunc = _.find( customFunctions, function(def){
       if ( def.functionId === functionId){
         //match version and package independent variations of an app key
         return (def.applicationKey||'').split('.').splice(0,2).join('.') === ( applicationKey ||'').split('.').splice(0,2).join('.') ;
@@ -116,7 +114,7 @@ ActionInstaller.prototype.addCustomFunction =
   }
 
   if (configurator) {
-    assign(matchingFunc, configurator(matchingFunc));
+    _.assign(matchingFunc, configurator(matchingFunc));
   }
 
 };
