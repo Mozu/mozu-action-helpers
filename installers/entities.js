@@ -39,6 +39,7 @@ function getListName(list) {
 }
 
 EntityInstaller.prototype.upsertList = function (list, context) {
+    context = context || this.client.context;
     var me = this;
     console.info('entityInstaller.upsertList called with list %j ', list);
     if (!list.entityListFullName) {
