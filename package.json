@@ -3,16 +3,27 @@
   "version": "0.5.3",
   "description": "Helper classes for authoring mozu actions",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "cov": "istanbul cover _mocha",
+    "ci-build": "npm test",
+    "ci-build-stable": "npm run ci-build",
+    "postci-build-stable": "mozu-validate-npm-package"
   },
   "author": "sparkle phipps",
   "devDependencies": {
-    "body-parser": "^1.14.1",
+    "body-parser": "^1.14.2",
     "express": "^4.13.3",
+    "istanbul": "^0.4.2",
     "mocha": "^2.3.4",
+    "mozu-validate-npm-package": "^1.0.1",
     "server-destroy": "^1.0.1"
   },
   "dependencies": {
-    "mozu-node-sdk": "^2.1.0"
+    "mozu-node-sdk": "^2.2.2"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mozu/mozu-action-helpers"
   }
 }
