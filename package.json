@@ -7,7 +7,8 @@
     "cov": "istanbul cover _mocha",
     "ci-build": "npm test",
     "ci-build-stable": "npm run ci-build",
-    "postci-build-stable": "mozu-validate-npm-package"
+    "postci-build-stable": "mozu-validate-npm-package",
+    "prepublish": "mozu-npm-publish-check"
   },
   "author": "Volusion, LLC",
   "devDependencies": {
@@ -15,11 +16,11 @@
     "express": "^4.13.3",
     "istanbul": "^0.4.2",
     "mocha": "^2.3.4",
-    "mozu-validate-npm-package": "^1.0.1",
+    "mozu-validate-npm-package": "^1.2.1",
     "server-destroy": "^1.0.1"
   },
   "dependencies": {
-    "mozu-node-sdk": "^2.2.2"
+    "mozu-node-sdk": "^2.3.6"
   },
   "license": "MIT",
   "repository": {
