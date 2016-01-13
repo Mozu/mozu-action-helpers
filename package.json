@@ -9,7 +9,7 @@
     "ci-build-stable": "npm run ci-build",
     "postci-build-stable": "mozu-validate-npm-package"
   },
-  "author": "sparkle phipps",
+  "author": "Volusion, LLC",
   "devDependencies": {
     "body-parser": "^1.14.2",
     "express": "^4.13.3",
@@ -24,6 +24,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mozu/mozu-action-helpers"
+    "url": "https://github.com/Mozu/mozu-action-helpers"
   }
 }
