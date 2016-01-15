@@ -26,9 +26,19 @@ function findWhere(coll, props) {
     return true;
   })
 }
+function filter(collection, predicate){
+  var out = [];
+	for (var i = 0; i < collection.length; i++) {
+	if(predicate(collection[i], i, collection)){
+	  out.push(collection[i]);
+	}
+  }
+  return out;
+}
 
 module.exports = {
   assign: assign,
   find: find,
-  findWhere: findWhere
+  findWhere: findWhere,
+  filter: filter
 };
