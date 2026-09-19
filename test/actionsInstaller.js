@@ -165,4 +165,55 @@ describe('Mozu Hosted Calls', function() {
     );
   })
 
+  it('forwards nodeVersion pin from manifest exports to customFunctions', function() {
+
+    var oppParams = require('./utils/apiOperationContext').operation1();
+    oppParams.context.apiContext = addLocalConfig(oppParams.context.apiContext);
+
+    var originalExports = oppParams.context.get.exports;
+    oppParams.context.get.exports = function() {
+      return [{
+        "id": "storefront.page.beforeRequest",
+        "virtualPath": "./dist\\app.js",
+        "actionId": "storefront.pages.global.beforeRequest",
+        "nodeVersion": 24
+      }];
+    };
+
+    var entitlementInstaller = require('../installers/actions')(oppParams.context);
+
+    verifyPayload = function(req, res) {
+      var action = _.findWhere(req.body.actions, {
+        actionId: 'storefront.pages.global.beforeRequest'
+      });
+      assert.ok(action, 'action exists');
+      var fn = action.contexts[0].customFunctions[0];
+      assert.equal(fn.nodeVersion, 24, 'nodeVersion pin was forwarded');
+    };
+
+    return entitlementInstaller.enableActions(oppParams.context)
+      .then(function() {
+        oppParams.context.get.exports = originalExports;
+      });
+  });
+
+  it('omits nodeVersion when the manifest export has no pin', function() {
+
+    var oppParams = require('./utils/apiOperationContext').operation1();
+    oppParams.context.apiContext = addLocalConfig(oppParams.context.apiContext);
+    var entitlementInstaller = require('../installers/actions')(oppParams.context);
+
+    verifyPayload = function(req, res) {
+      var action = _.findWhere(req.body.actions, {
+        actionId: 'storefront.pages.global.beforeRequest'
+      });
+      assert.ok(action, 'action exists');
+      var fn = action.contexts[0].customFunctions[0];
+      assert.ok(!('nodeVersion' in fn),
+        'unpinned function must not carry a nodeVersion on the wire');
+    };
+
+    return entitlementInstaller.enableActions(oppParams.context);
+  });
+
 });

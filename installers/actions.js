@@ -29,11 +29,12 @@ ActionInstaller.prototype.enableActions =
       //dont add installers.. not really actions
       if (extExport.actionId.indexOf('embedded.platform.applications') !== 0) {
         me.addCustomFunction(
-          enabledActions, 
-          extExport.actionId, 
-          extExport.id, 
+          enabledActions,
+          extExport.actionId,
+          extExport.id,
           applicationKey,
-          configurators && configurators[extExport.id]
+          configurators && configurators[extExport.id],
+          extExport.nodeVersion
         );
       }
     });
@@ -62,7 +63,7 @@ ActionInstaller.prototype.enableActions =
 };
 
 ActionInstaller.prototype.addCustomFunction =
-  function(enabledActions, actionId, functionId, applicationKey, configurator) {
+  function(enabledActions, actionId, functionId, applicationKey, configurator, nodeVersion) {
 
   var customFunctions,
     action;
@@ -112,6 +113,10 @@ ActionInstaller.prototype.addCustomFunction =
     //replace the applicationKey incase of switching pacakges or upgrading version
     matchingFunc.applicationKey = applicationKey;
   }
+
+  //forward the app's Node.js major pin (from functions.json) onto the registered
+  //custom function; undefined clears a stale pin and is omitted from the PUT body
+  matchingFunc.nodeVersion = nodeVersion;
 
   if (configurator) {
     _.assign(matchingFunc, configurator(matchingFunc));
